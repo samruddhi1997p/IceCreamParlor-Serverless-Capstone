@@ -1,11 +1,10 @@
-# FrostBite Serverless Application
+# Serverless Twitter
 
-Frostbite is a serverless application built for an ice cream parlor where a user can login, check the menu and place an order. The application is using AWS Lambda, Serverless Framework and REACT.
+This project implements a simple twiiter-replica application using AWS Lambda and Serverless framework. 
 
 # Functionality of the application
 
-This application will allow user place an order and view it in the MyOrder section. The user can edit as well as delete the order.
-
+This application will allow creating/removing/updating/fetching tweets. Each user has access to Tweets that he/she has created and the ones that have been declared public.
 
 # Frontend
 
@@ -17,13 +16,9 @@ This frontend should work with your serverless application once it is developed,
 
 To implement authentication in your application, you would have to create an Auth0 application and copy "domain" and "client id" to the `config.ts` file in the `client` folder. We recommend using asymmetrically encrypted JWT tokens.
 
-# Best practices
-
-To complete this exercise, please follow the best practices from the 6th lesson of this course.
-
 ## Logging
 
-The starter code comes with a configured [Winston](https://github.com/winstonjs/winston) logger that creates [JSON formatted](https://stackify.com/what-is-structured-logging-and-why-developers-need-it/) log statements.
+The starter code comes with a configured [Winston](https://github.com/winstonjs/winston) logger that creates [JSON formatted](https://stackify.com/what-is-structured-logging-and-why-developers-need-it/) log statements. You can use it to write log messages like this:
 
 # How to run the application
 
@@ -51,12 +46,8 @@ This should start a development server with the React application that will inte
 
 # Postman collection
 
-An alternative way to test your API, you can use the Postman collection that contains sample requests. You can find a Postman collection in this project. To import this collection, do the following.
-
-
+An alternative way to test your API, you can use the Postman collection that contains sample requests. You can find a Postman collection in this project.
 
 Sample Image:
 
-![Alt text](Output/WorkingApp.png?raw=true "Image 1")
-
-
+![Alt text](Output/Login.png?raw=true "Image 1")

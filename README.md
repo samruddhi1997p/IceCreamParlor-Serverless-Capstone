@@ -57,6 +57,6 @@ An alternative way to test your API, you can use the Postman collection that con
 
 Sample Image:
 
-![Alt text](Output/Login.png?raw=true "Image 1")
+![Alt text](Output/WorkingApp.png?raw=true "Image 1")
 
 

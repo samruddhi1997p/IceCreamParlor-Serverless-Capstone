@@ -1,49 +1,49 @@
 import * as uuid from 'uuid'
 import { PostItem } from '../models/PostItem'
-import { CreatePostRequest } from '../requests/CreatePostRequest'
-import { UpdatePostRequest } from '../requests/UpdatePostRequest'
+import { CreateOrderRequest } from '../requests/CreateOrderRequest'
+import { UpdateOrderRequest } from '../requests/UpdateOrderRequest'
 import { PostAccess } from '../dataLayer/PostsAccess'
 import { createLogger } from '../utils/logger'
 
 const postAccess = new PostAccess()
 const logger = createLogger('todos')
 
-export async function GetPosts(userId: string): Promise<PostItem[]>{
+export async function GetOrders(userId: string): Promise<PostItem[]>{
     
-    logger.info('In GetPost() function')
-    return await postAccess.GetPosts(userId)
+    logger.info('In GetOrder() function')
+    return await postAccess.GetOrders(userId)
 }
 
-export async function GetPublicPosts(): Promise<PostItem[]>{
+export async function GetPublicOrder(): Promise<PostItem[]>{
     
-    logger.info('In GetPublicPosts() function')
-    return await postAccess.GetPublicPosts()
+    logger.info('In GetPublicOrder() function')
+    return await postAccess.GetPublicOrder()
 }
 
-export async function GetPostsById(postId): Promise<PostItem>{
+export async function GetOrdersById(postId): Promise<PostItem>{
     
-    logger.info('In GetPostsById() function')
-    return await postAccess.GetPostsById(postId)
+    logger.info('In GetOrdersById() function')
+    return await postAccess.GetOrdersById(postId)
 }
 
-export async function CreatePost(CreatePostRequest: CreatePostRequest, userId: string): Promise<PostItem>{
+export async function CreateOrder(CreateOrderRequest: CreateOrderRequest, userId: string): Promise<PostItem>{
     
-    logger.info('In CreatePost() function')
+    logger.info('In CreateOrder() function')
     const postId = uuid.v4()
 
-    return await postAccess.CreatePost({
+    return await postAccess.CreateOrder({
         userId: userId,
         postId: postId,
         createdAt: new Date().toISOString(),
-        caption: CreatePostRequest.caption,
-        isPublic: CreatePostRequest.isPublic
+        caption: CreateOrderRequest.caption,
+        isPublic: CreateOrderRequest.isPublic
     })
 }
 
-export async function UpdatePost(postId: string, updatedPost: UpdatePostRequest, userId: string): Promise<string>{
+export async function UpdateOrder(postId: string, updatedPost: UpdateOrderRequest, userId: string): Promise<string>{
 
-    logger.info('In UpdatePost() function')
-    return await postAccess.UpdatePost({
+    logger.info('In UpdateOrder() function')
+    return await postAccess.UpdateOrder({
         userId: userId,
         postId: postId,
         createdAt: new Date().toISOString(),
@@ -52,10 +52,10 @@ export async function UpdatePost(postId: string, updatedPost: UpdatePostRequest,
     })
 }
 
-export async function DeletePost(postId: string, userId: string): Promise<string>{
+export async function DeleteOrder(postId: string, userId: string): Promise<string>{
 
-    logger.info('In DeletePost() function')
-    return await postAccess.DeletePost(postId, userId)
+    logger.info('In DeleteOrder() function')
+    return await postAccess.DeleteOrder(postId, userId)
 }
 
 export async function GenerateUploadUrl(postId: string): Promise<string>{

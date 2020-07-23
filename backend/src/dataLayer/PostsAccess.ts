@@ -11,16 +11,16 @@ export class PostAccess {
 
     constructor(
         private readonly docClient: DocumentClient = createDynamoDBClient(),
-        private readonly postsTable = process.env.POSTS_TABLE,
+        private readonly postsTable = process.env.ORDER_TABLE,
         private readonly IsPublicIndex = process.env.IS_PUBLIC_INDEX,
-        private readonly PostIdIndex = process.env.POST_ID_INDEX,
+        private readonly OrderIndex = process.env.ORDERID_INDEX,
         private readonly s3 = new XAWS.S3({ signatureVersion: 'v4' }),
         private readonly bucketName = process.env.IMAGES_S3_BUCKET,
         private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION
         ) {
     }
 
-    async GetPosts (userId: string): Promise<PostItem[]>{
+    async GetOrders (userId: string): Promise<PostItem[]>{
 
       logger.info('Getting my posts')
 
@@ -38,14 +38,14 @@ export class PostAccess {
       return result.Items as PostItem[]
     }
 
-    async GetPostsById (postId: string): Promise<PostItem>{
+    async GetOrdersById (postId: string): Promise<PostItem>{
 
       logger.info('Getting posts by ID')
 
       const result = await this.docClient
       .query({
         TableName: this.postsTable,
-        IndexName: this.PostIdIndex,
+        IndexName: this.OrderIndex,
         KeyConditionExpression: 'postId = :postId',
         ExpressionAttributeValues: {
           ':postId': postId
@@ -56,7 +56,7 @@ export class PostAccess {
       return result.Items[0] as PostItem
     }
 
-    async GetPublicPosts (): Promise<PostItem[]>{
+    async GetPublicOrder (): Promise<PostItem[]>{
 
       logger.info('Getting public posts')
 
@@ -75,7 +75,7 @@ export class PostAccess {
       return result.Items as PostItem[]
     }
 
-    async CreatePost (postItem: PostItem): Promise<PostItem> {
+    async CreateOrder (postItem: PostItem): Promise<PostItem> {
 
       logger.info('Creating a post item')
       const newPostItem = {
@@ -91,7 +91,7 @@ export class PostAccess {
       return newPostItem
     }
 
-    async UpdatePost (postItem: PostItem): Promise<string> {
+    async UpdateOrder (postItem: PostItem): Promise<string> {
       
       logger.info(`Updating a post with ID ${postItem.postId}`)
 
@@ -113,7 +113,7 @@ export class PostAccess {
       return "success"
     }
 
-    async DeletePost (postId: string, userId: string): Promise<string>{
+    async DeleteOrder (postId: string, userId: string): Promise<string>{
 
       logger.info(`Updating a post with ID ${postId}`)
       await this.docClient.delete({

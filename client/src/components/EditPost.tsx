@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Form, Button } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
-import { getUploadUrl, uploadFile, patchPost, getPostsById } from '../api/posts-api'
-import { UpdatePostRequest } from '../types/UpdatePostRequest'
+import { getUploadUrl, uploadFile, patchPost, GetOrdersById } from '../api/posts-api'
+import { UpdateOrderRequest } from '../types/UpdateOrderRequest'
 import { Post } from '../types/Post'
 import { History } from 'history'
 
@@ -96,7 +96,7 @@ export class EditPost extends React.PureComponent<
 
     //Upating caption
     try{ 
-      const updatedPost: UpdatePostRequest =  {
+      const updatedPost: UpdateOrderRequest =  {
         caption: this.state.post.caption,
         isPublic: this.state.post.isPublic
       }
@@ -120,7 +120,7 @@ export class EditPost extends React.PureComponent<
 
   async componentDidMount() {
     try {
-      const post = await getPostsById(this.props.auth.getIdToken(), this.props.match.params.postId)
+      const post = await GetOrdersById(this.props.auth.getIdToken(), this.props.match.params.postId)
       console.log(post)
       this.setState({post})
     } catch (e) {

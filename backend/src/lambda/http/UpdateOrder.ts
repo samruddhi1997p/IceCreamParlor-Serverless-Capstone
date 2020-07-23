@@ -1,39 +1,40 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { CreatePostRequest } from '../../requests/CreatePostRequest'
-import { CreatePost } from '../../businessLogic/posts'
+import { UpdateOrderRequest } from '../../requests/UpdateOrderRequest'
 import * as middy from 'middy';
 import { cors } from 'middy/middlewares';
 import { createLogger } from '../../utils/logger';
+import { UpdateOrder } from '../../businessLogic/posts'
 import { getUserId } from '../utils'
 import { ResponseHelper } from '../../helpers/responseHelper'
 
-const logger = createLogger ('Create Post')
+const logger = createLogger ('Update Todo Item')
 const apiResponseHelper = new ResponseHelper()
 
 export const handler = middy(
     async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-        try{
-            logger.info('Processing event: ', event)
 
-            const newPost: CreatePostRequest = JSON.parse(event.body)
+        try{
+            logger.info("Processing event: " + event)
+
+            // Update a post with the provided id using values in the "updatedPost" object
+            const postId = event.pathParameters.postId
+            const updatedPost: UpdateOrderRequest = JSON.parse(event.body)
             const userId = getUserId(event)
 
-            const newItem = await CreatePost(newPost, userId)
-
-            return apiResponseHelper.generateSuccessRespose(201, 'item', newItem)
+            await UpdateOrder(postId, updatedPost, userId)
+            return apiResponseHelper.generateEmptySuccessResponse(200)
         } 
         
         catch (e) {
-            logger.error('Error: ' + e.message)
-            
+            logger.error("Error: " + e.message)
             return apiResponseHelper.generatErrorResponse(500, e.message)
         }
     }
 )
 
 handler.use(
-    cors({
+    cors ({
         credentials: true
-      })
+    })
 )

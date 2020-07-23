@@ -5,6 +5,4 @@ export interface Post {
   caption: string
   isPublic: string
   attachmentUrl?: string
-  increment: number
-  decrement: number
 }

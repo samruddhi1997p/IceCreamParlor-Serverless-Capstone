@@ -1,4 +1,4 @@
-export interface CreatePostRequest {
+export interface CreateOrderRequest {
   caption: string
   isPublic: string
 }

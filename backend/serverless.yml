@@ -1,5 +1,5 @@
 service:
-  name: frostbite-app
+  name: frostbite-app-sam
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
@@ -18,10 +18,10 @@ provider:
     apiGateway: true
 
   environment:
-    POSTS_TABLE: POSTS-${self:provider.stage}
+    ORDER_TABLE: frostbite-sam-${self:provider.stage}
     IS_PUBLIC_INDEX: IsPublicIndex
-    POST_ID_INDEX: PostIdIndex
-    IMAGES_S3_BUCKET: samrudhi-frostbite-${self:provider.stage}
+    ORDERID_INDEX: OrderIndex
+    IMAGES_S3_BUCKET: sam-frostbite-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
 custom:
@@ -32,10 +32,10 @@ custom:
         title: Frostbite API
         description: Serverless Frostbite application
     models:
-      - name: CreatePostRequest
+      - name: CreateOrderRequest
         contentType: application/json
         schema: ${file(models/create-post-request.json)}
-      - name: UpdatePostRequest
+      - name: UpdateOrderRequest
         contentType: application/json
         schema: ${file(models/update-post-request.json)}
 
@@ -51,8 +51,8 @@ functions:
         Resource:
           - "*"
 
-  GetPosts:
-    handler: src/lambda/http/getPosts.handler
+  GetOrders:
+    handler: src/lambda/http/GetOrders.handler
     events:
       - http:
           method: get
@@ -63,7 +63,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ORDER_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -71,8 +71,8 @@ functions:
         Resource:
           - "*"
 
-  GetPostsById:
-    handler: src/lambda/http/getPostsById.handler
+  GetOrdersById:
+    handler: src/lambda/http/GetOrdersById.handler
     events:
       - http:
           method: get
@@ -83,11 +83,11 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}/index/${self:provider.environment.POST_ID_INDEX}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ORDER_TABLE}/index/${self:provider.environment.ORDERID_INDEX}
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ORDER_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -95,8 +95,8 @@ functions:
         Resource:
           - "*"
 
-  GetPublicPosts:
-    handler: src/lambda/http/getPublicPosts.handler
+  GetPublicOrder:
+    handler: src/lambda/http/GetPublicOrder.handler
     events:
       - http:
           method: get
@@ -107,11 +107,11 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}/index/${self:provider.environment.IS_PUBLIC_INDEX}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ORDER_TABLE}/index/${self:provider.environment.IS_PUBLIC_INDEX}
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ORDER_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -119,8 +119,8 @@ functions:
         Resource:
           - "*"
 
-  CreatePost:
-    handler: src/lambda/http/createPost.handler
+  CreateOrder:
+    handler: src/lambda/http/CreateOrder.handler
     events:
       - http:
           method: post
@@ -132,12 +132,12 @@ functions:
             summary: Create a new post item
             description: Create a new post item
             requestModels:
-              'application/json': CreatePostRequest
+              'application/json': CreateOrderRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ORDER_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -145,8 +145,8 @@ functions:
         Resource:
           - "*"
 
-  UpdatePost:
-    handler: src/lambda/http/updatePost.handler
+  UpdateOrder:
+    handler: src/lambda/http/UpdateOrder.handler
     events:
       - http:
           method: patch
@@ -158,12 +158,12 @@ functions:
             summary: Update a new post item
             description: Update a new post item
             requestModels:
-              'application/json': UpdatePostRequest
+              'application/json': UpdateOrderRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ORDER_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -171,8 +171,8 @@ functions:
         Resource:
           - "*"
 
-  DeletePost:
-    handler: src/lambda/http/deletePost.handler
+  DeleteOrder:
+    handler: src/lambda/http/DeleteOrder.handler
     events:
       - http:
           method: delete
@@ -183,7 +183,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.POSTS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ORDER_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -252,7 +252,7 @@ resources:
           - AttributeName: postId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.POSTS_TABLE}
+        TableName: ${self:provider.environment.ORDER_TABLE}
         GlobalSecondaryIndexes:
           - IndexName: ${self:provider.environment.IS_PUBLIC_INDEX}
             KeySchema:
@@ -262,7 +262,7 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
-          - IndexName: ${self:provider.environment.POST_ID_INDEX}
+          - IndexName: ${self:provider.environment.ORDERID_INDEX}
             KeySchema:
               - AttributeName: postId
                 KeyType: HASH

@@ -14,7 +14,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createPost, deletePost, getPosts, patchPost } from '../api/posts-api'
+import { CreateOrder, DeleteOrder, GetOrders, patchPost } from '../api/posts-api'
 import Auth from '../auth/Auth'
 import { Post } from '../types/Post'
 
@@ -50,7 +50,7 @@ export class MyPosts extends React.PureComponent<PostsProps, PostsState> {
     try {
       console.log("is public: " + this.state.isPublic)
       console.log("new post name: " + this.state.newPostName)
-      const newPost = await createPost(this.props.auth.getIdToken(), {
+      const newPost = await CreateOrder(this.props.auth.getIdToken(), {
         caption: this.state.newPostName,
         isPublic: this.state.isPublic
       })
@@ -65,7 +65,7 @@ export class MyPosts extends React.PureComponent<PostsProps, PostsState> {
 
   onPostDelete = async (postId: string) => {
     try {
-      await deletePost(this.props.auth.getIdToken(), postId)
+      await DeleteOrder(this.props.auth.getIdToken(), postId)
       this.setState({
         posts: this.state.posts.filter(post => post.postId != postId)
       })
@@ -76,7 +76,7 @@ export class MyPosts extends React.PureComponent<PostsProps, PostsState> {
 
   async componentDidMount() {
     try {
-      const posts = await getPosts(this.props.auth.getIdToken())
+      const posts = await GetOrders(this.props.auth.getIdToken())
       this.setState({
         posts,
         loadingPosts: false
@@ -91,14 +91,14 @@ export class MyPosts extends React.PureComponent<PostsProps, PostsState> {
       <div>
         <Header as="h1">New Order</Header>
 
-        {this.renderCreatePostInput()}
+        {this.renderCreateOrderInput()}
 
         {this.renderPosts()}
       </div>
     )
   }
 
-  renderCreatePostInput() {
+  renderCreateOrderInput() {
     return (
       <Grid.Row>
         <Grid.Column width={16}>

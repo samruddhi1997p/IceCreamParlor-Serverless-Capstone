@@ -1,10 +1,10 @@
 import { apiEndpoint } from '../config'
 import { Post } from '../types/Post';
-import { CreatePostRequest } from '../types/CreatePostRequest';
+import { CreateOrderRequest } from '../types/CreateOrderRequest';
 import Axios from 'axios'
-import { UpdatePostRequest } from '../types/UpdatePostRequest';
+import { UpdateOrderRequest } from '../types/UpdateOrderRequest';
 
-export async function getPosts(idToken: string): Promise<Post[]> {
+export async function GetOrders(idToken: string): Promise<Post[]> {
   console.log('Fetching my posts')
 
   const response = await Axios.get(`${apiEndpoint}/posts/myposts`, {
@@ -30,7 +30,7 @@ export async function getPublicPosts(idToken: string): Promise<Post[]> {
   return response.data.items
 }
 
-export async function getPostsById(idToken: string, postId: string): Promise<Post> {
+export async function GetOrdersById(idToken: string, postId: string): Promise<Post> {
   console.log('Fetching posts by ID')
 
   const response = await Axios.get(`${apiEndpoint}/posts/${postId}`, {
@@ -44,9 +44,9 @@ export async function getPostsById(idToken: string, postId: string): Promise<Pos
   return response.data.item
 }
 
-export async function createPost(
+export async function CreateOrder(
   idToken: string,
-  newPost: CreatePostRequest
+  newPost: CreateOrderRequest
 ): Promise<Post> {
   const response = await Axios.post(`${apiEndpoint}/posts`,  JSON.stringify(newPost), {
     headers: {
@@ -62,7 +62,7 @@ export async function createPost(
 export async function patchPost(
   idToken: string,
   postId: string,
-  updatedPost: UpdatePostRequest
+  updatedPost: UpdateOrderRequest
 ): Promise<void> {
   await Axios.patch(`${apiEndpoint}/posts/${postId}`, JSON.stringify(updatedPost), {
     headers: {
@@ -72,7 +72,7 @@ export async function patchPost(
   })
 }
 
-export async function deletePost(
+export async function DeleteOrder(
   idToken: string,
   postId: string
 ): Promise<void> {

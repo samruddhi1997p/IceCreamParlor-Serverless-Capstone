@@ -14,7 +14,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createPost, deletePost, getPublicPosts, patchPost } from '../api/posts-api'
+import { CreateOrder, DeleteOrder, getPublicPosts, patchPost } from '../api/posts-api'
 import Auth from '../auth/Auth'
 import { Post } from '../types/Post'
 

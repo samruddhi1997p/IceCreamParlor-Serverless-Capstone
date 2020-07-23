@@ -3,10 +3,11 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy';
 import { cors } from 'middy/middlewares';
 import { createLogger } from '../../utils/logger';
-import { GetPostsById } from '../../businessLogic/posts'
+import { GetOrders } from '../../businessLogic/posts'
+import { getUserId } from '../utils'
 import { ResponseHelper } from '../../helpers/responseHelper'
 
-const logger = createLogger ('Get Posts By ID')
+const logger = createLogger ('Get user specific posts')
 const apiResponseHelper = new ResponseHelper()
 
 export const handler = middy(
@@ -15,11 +16,11 @@ export const handler = middy(
     try{
       // Get all posts for a current user
       logger.info('Processing event: ', event)
-      const postId = event.pathParameters.postId
-      const post = await GetPostsById(postId)
 
-      logger.info(`Post by id ${postId}:` + JSON.stringify(post))
-      return apiResponseHelper.generateSuccessRespose(200, 'item', post)
+      const userId = getUserId(event)
+      const posts = await GetOrders(userId)
+
+      return apiResponseHelper.generateSuccessRespose(200, 'items', posts)
     } 
     
     catch (e) {
